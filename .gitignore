@@ -53,3 +53,10 @@ coverage/
 *.editorconfig
 *.props
 *.targets
+/PipeNetwork/pipenetwork/Debug
+*.db
+*.sdf
+*.ipch
+*.ilk
+PipeNetwork/pipenetwork/pipenetwork.vcxproj
+PipeNetwork/pipenetwork.sln
