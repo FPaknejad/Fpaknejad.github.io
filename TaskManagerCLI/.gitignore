@@ -1,0 +1,24 @@
+# Build and cache
+build/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# IDEs
+.vscode/
+.idea/
+*.code-workspace
+
+# Compiled binaries and objects
+*.o
+*.obj
+*.exe
+*.out
+*.a
+*.so
+*.dSYM/
+
+# System
+.DS_Store
+Thumbs.db
