@@ -4,6 +4,10 @@
 //
 //  Created by Fatemeh Paknejad on 17.07.25.
 //
+// TaskRepository — File Handler
+// file handling
+// reads tasks from tasks.txt
+// saves current tasks to tasks.txt
 
 #ifndef TaskRepository_hpp
 #define TaskRepository_hpp

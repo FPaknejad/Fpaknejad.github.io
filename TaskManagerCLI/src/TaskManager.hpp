@@ -4,6 +4,12 @@
 //
 //  Created by Fatemeh Paknejad on 05.07.25.
 //
+// TaskManager — vector, add/list/mark/delete/edit
+// keeps std::vector<Task>
+// can add, list, mark done, delete, edit tasks
+// talks to the repository for save/load
+
+
 
 #ifndef TaskManager_hpp
 #define TaskManager_hpp
@@ -28,6 +34,8 @@ public:
     void deleteTask();
     void filterTasks() const;
     void editTaskTitle();
+    void sortByPriority();
+    void changePriority(int taskIndex, Task::Priority newPriority);
 
     void setRepository(ITaskRepository* customRepo);
     void addTask(const std::string& title, bool done = false);  // for testing

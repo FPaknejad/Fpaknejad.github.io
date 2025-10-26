@@ -22,3 +22,5 @@ Makefile
 # System
 .DS_Store
 Thumbs.db
+# Scraps local notes
+.scraps/
