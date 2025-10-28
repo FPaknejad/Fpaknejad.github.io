@@ -60,3 +60,15 @@ coverage/
 *.ilk
 PipeNetwork/pipenetwork/pipenetwork.vcxproj
 PipeNetwork/pipenetwork.sln
+TaskManagerCLI/build/.ninja_deps
+TaskManagerCLI/build/.ninja_log
+TaskManagerCLI/build/app
+TaskManagerCLI/build/build.ninja
+TaskManagerCLI/build/Testing/20251023-2346/Test.xml
+TaskManagerCLI/build/Testing/TAG
+TaskManagerCLI/build/Testing/Temporary/CTestCostData.txt
+TaskManagerCLI/build/Testing/Temporary/LastTest.log
+TaskManagerCLI/build/Testing/Temporary/LastTest_20251023-2346.log
+TaskManagerCLI/build/Testing/Temporary/LastTestsFailed.log
+TaskManagerCLI/build/tests/TaskManagerTest
+TaskManagerCLI/build/tests/TaskTest
