@@ -27,13 +27,20 @@ private:
     ITaskRepository *repo;
     
 public:
-    int runMenu();
+
+//void addTask(const std::string& title, Task::Priority priority);
+//void markTaskDone(size_t index);
+//void deleteTask(size_t index);
+//void sortByPriority();
+//void changePriority(size_t index, Task::Priority priority);
+    const std::vector<Task>& getTasks() const;
+    //int runMenu();
     void addTask();
-    void listTasks() const;
+   // void listTasks() const;
     void markTaskDone();
     void deleteTask();
-    void filterTasks() const;
-    void editTaskTitle();
+    //void filterTasks() const;
+   // void editTaskTitle();
     void sortByPriority();
     void changePriority(int taskIndex, Task::Priority newPriority);
 
