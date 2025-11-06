@@ -1,0 +1,53 @@
+body {
+  font-family: system-ui, sans-serif;
+  margin: 12px;
+  min-width: 300px;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+#query {
+  flex: 1;
+  padding: 6px 8px;
+}
+
+.controls button {
+  flex: 1;
+}
+
+#summary {
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+#tabList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+#tabList li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 4px;
+  border-radius: 6px;
+}
+
+#tabList li.active {
+  background: #f0f7ff;
+}
+
+#tabList li .count {
+  background: #eee;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 12px;
+}
