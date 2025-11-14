@@ -3,7 +3,9 @@
 //  TaskManagerCLI
 //
 //  Created by Fatemeh Paknejad on 03.07.25.
-//
+
+// Main — app entry
+// wires everything together (creates repo, manager, UI)
 
 #include <stdio.h>
 #include <iostream>

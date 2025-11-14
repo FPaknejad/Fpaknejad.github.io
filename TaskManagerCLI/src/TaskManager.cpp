@@ -38,11 +38,12 @@ void TaskManager::addTask(){
         return; 
     }
     else if (priorityInput < 1|| priorityInput > 3){
-        std::cout<<"Please enter valid priority number 1 - 2\n"<<std::flush;
+        std::cout<<"Please enter valid priority number 1 - 3\n"<<std::flush;
     }
 
 
-    Task::setPriority(priorityInput);
+    taskList.back().setPriority(static_cast<Task::Priority>(priorityInput - 1));
+    repo->saveToFile(taskList);
 }
 
 void TaskManager::listTasks() const{
@@ -161,6 +162,20 @@ void TaskManager::editTaskTitle(){
     taskList[taskIndex-1].setTitle(newTitle);
 }
 
+void TaskManager::sortByPriority(){
+    std::sort(taskList.begin(), taskList.end(), [](const Task& a, const Task& b) {
+        return static_cast<int>(a.getPriority()) > static_cast<int>(b.getPriority());
+    });
+}
+
+void TaskManager::changePriority(int taskIndex, Task::Priority newPriority) {
+    if (taskIndex < 0 || taskIndex >= static_cast<int>(taskList.size())) {
+        std::cout << "Invalid task index.\n" << std::flush;
+        return;
+    }
+    taskList[taskIndex].setPriority(newPriority);
+}
+
 int TaskManager:: runMenu(){
     
     
@@ -170,11 +185,13 @@ int TaskManager:: runMenu(){
     repo -> readFile(taskList);
     
     while (true){
-        std::cout<<"Enter the Number of options \n"<<"1. Add Task \n2. List Tasks\n3. Mark Task as Done\n4. delete task\n5. Filter tasks \n6. Edit Task Title\n7. Exit\n"<<std::flush;
+        std::cout<<"Enter the Number of options \n"<<"1. Add Task \n2. List Tasks\n3. Mark Task as Done\n4. delete task\n5. Filter tasks \n"
+        <<"6. Edit Task Title\n7. Exit\n8. Sort by Priority\n9. Change Task Priority\n"
+        <<std::flush;
         
         std::cin>>menuIndex;
         if (menuIndex < 1 || menuIndex > 7){
-            std::cout<<"Invalid index. Please enter a valid number between 1 to 7\n"<<std::flush;
+            std::cout<<"Invalid index. Please enter a valid number between 1 to 9\n"<<std::flush;
         }
         if (std::cin.fail()) {
             std::cin.clear(); // clear error state
@@ -204,6 +221,25 @@ int TaskManager:: runMenu(){
                 case 7:
                     repo -> saveToFile(taskList);
                     return 0;
+                case 8:
+                    sortByPriority();
+                    break;
+                case 9:
+                    int index;
+                    int p;
+                    std::cout << "Enter task index to change priority: " << std::flush;
+                    std::cin >> index;
+                    std::cout << "Enter new priority (0. Low, 1. Medium, 2. High): " << std::flush;
+                    std::cin >> p;
+                    if (std::cin.fail() || p < 0 || p > 2) {
+                        std::cin.clear(); // clear error state
+                        std::cin.ignore(1000, '\n'); // discard bad input
+                        std::cout << "Invalid input. Please enter a valid number.\n"<<std::flush;
+                        break;
+                    }
+                    changePriority(index - 1, static_cast<Task::Priority>(p));
+                    break;
+
                 
                 default:
                     break;

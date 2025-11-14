@@ -4,7 +4,8 @@
 //
 //  Created by Fatemeh Paknejad on 03.07.25.
 //
-
+// Task class — title, done, priority
+//can print, mark done, get/set title and priority
 #ifndef TASK_H
 #define TASK_H
 
