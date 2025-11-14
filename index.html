@@ -3,66 +3,150 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Name | Portfolio</title>
+  <title>Fatemeh Paknejad | Projects</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Header -->
   <header>
-    <h1>Your Name</h1>
-    <p>Software Developer | C++ | Cybersecurity</p>
+    <h1>Fatemeh Paknejad</h1>
+    <p>Software developer building practical tools for faster and smoother workflow.</p>
     <nav>
-      <a href="#about">About</a>
       <a href="#projects">Projects</a>
       <a href="#skills">Skills</a>
       <a href="#contact">Contact</a>
     </nav>
   </header>
 
-  <!-- About -->
-  <section id="about">
-    <h2>About Me</h2>
-    <p>Short introduction about you, your studies, and what you enjoy building.</p>
-  </section>
+  <main>
+    <section id="about">
+      <h2>About Me</h2>
+      <p>
+        Software Developer with experience in automotive software, C++ tooling, and workflow automation.  
+        Previously worked on Smart Access systems, AUTOSAR components, project management tooling,  
+        and productivity pipelines using C++, Python.  
+        I enjoy building practical tools, experimenting with new tech stacks, and turning small ideas into working software.
+      </p>
+    </section>
 
-  <!-- Projects -->
-  <section id="projects">
-    <h2>Projects</h2>
-    <div class="project-card">
-      <h3>Banking System (C++)</h3>
-      <p>CLI app simulating bank accounts with transactions, file persistence, and error handling.</p>
-      <a href="https://github.com/yourusername/banking-system" target="_blank">GitHub Repo</a>
-    </div>
-    <div class="project-card">
-      <h3>Life Management App</h3>
-      <p>Cross-platform productivity app with AI integration for reminders and prioritization.</p>
-      <a href="https://github.com/yourusername/life-management-app" target="_blank">GitHub Repo</a>
-    </div>
-  </section>
+    <section id="projects">
+      <h2>Projects</h2>
+      <div class="project-grid">
+        <article class="project-card">
+          <h3>CSPPlugin</h3>
+          <p>Custom Loupedeck plugin with commands for tool switching, zooming, layer visibility, and muting so I can drive Clip Studio entirely from the console.</p>
+          <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/CSPPlugin" target="_blank" rel="noreferrer">View code</a>
+        </article>
+        <article class="project-card">
+          <h3>Dictionary ChromeExtension</h3>
+          <p> A Quick Dictionary that adds a context action that sends highlighted German words directly for instant translation.</p>
+          <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/Dictionary%20ChromeExtension" target="_blank" rel="noreferrer">View code</a>
+        </article>
+        <article class="project-card">
+          <h3>ExpenseTracker</h3>
+          <p>Early-stage C++ expense tracker with an <code>Expense</code> model plus CLI/server scaffolding for logging purchases and categories.</p>
+          <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/ExpenseTracker" target="_blank" rel="noreferrer">View code</a>
+        </article>
+        <article class="project-card">
+          <h3>Hamdam</h3>
+          <p>Swift/Xcode starter for the HamDam iOS concept. Currently just the asset catalog while I shape UX and features.</p>
+          <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/Hamdam" target="_blank" rel="noreferrer">View code</a>
+        </article>
+        <article class="project-card">
+          <h3>Learning Stuff</h3>
+          <p>A grab bag of learning experiments—Flutter <code>testapp</code>, Swift playgrounds, Node/JavaScript practice, and a C++ full-stack demo.</p>
+          <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/Learning%20Stuff" target="_blank" rel="noreferrer">View code</a>
+        </article>
+        <article class="project-card">
+          <h3>PipeNetwork</h3>
+          <p>C++ simulation that ingests <code>pipedata.txt</code> to calculate flow rates for a Bavarian pipe network model.</p>
+          <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/PipeNetwork" target="_blank" rel="noreferrer">View code</a>
+        </article>
+        <article class="project-card">
+          <h3>Search ChromeExtension</h3>
+          <p>“Multi-Tab Find” searches every open tab for a term and lets me walk results without leaving Chrome.</p>
+          <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/Search%20ChromeExtension" target="_blank" rel="noreferrer">View code</a>
+        </article>
+        <article class="project-card">
+          <h3>Subtitle ChromeExtention</h3>
+          <p>“Dual Subtitles (Any Player)” injects stacked bilingual subtitles into any custom HTML5 video player.</p>
+          <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/Subtitle%20ChromeExtention" target="_blank" rel="noreferrer">View code</a>
+        </article>
+        <article class="project-card">
+          <h3>TaskManagerCLI</h3>
+          <p>Menu-driven C++ task manager that adds, edits, filters, and persists todos through a simple repository interface.</p>
+          <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/TaskManagerCLI" target="_blank" rel="noreferrer">View code</a>
+        </article>
+        <article class="project-card">
+          <h3>Portfolio Landing Page</h3>
+          <p>This site—simple HTML/CSS that surfaces the projects above and mirrors the README descriptions.</p>
+          <a href="https://github.com/FPaknejad/Fpaknejad.github.io" target="_blank" rel="noreferrer">View repo</a>
+        </article>
+      </div>
+    </section>
 
-  <!-- Skills -->
-  <section id="skills">
-    <h2>Skills</h2>
-    <ul>
-      <li>C++</li>
-      <li>Python</li>
-        <li>c++</li>
-      <li>Git & GitHub</li>
-        <li>Cybersecurity Basics</li>
-    </ul>
-  </section>
+    <section id="skills">
+      <h2>Skills Snapshot</h2>
+      <div class="skills-grid">
+        <div>
+          <h3>Programming</h3>
+          <ul class="pill-list">
+            <li>C++</li>
+            <li>Python</li>
+            <li>C#</li>
+            <li>SQL</li>
+          </ul>
+        </div>
 
-  <!-- Contact -->
-  <section id="contact">
-    <h2>Contact</h2>
-    <p>Email: <a href="ftpaknejad@gmail.com">ftpaknejad@gmail.com</a></p>
-    <p><a href="https://fpaknejad.github.io/" target="_blank">GitHub</a> | 
-       <a href="https://www.linkedin.com/in/fatemeh-paknejad/" target="_blank">LinkedIn</a></p>
-  </section>
+        <div>
+          <h3>Frameworks & Libraries</h3>
+          <ul class="pill-list">
+            <li>Qt</li>
+            <li>AUTOSAR</li>
+          </ul>
+        </div>
 
-  <!-- Footer -->
+        <div>
+          <h3>DevOps & Tools</h3>
+          <ul class="pill-list">
+            <li>Docker</li>
+            <li>Git & GitHub Actions</li>
+            <li>CI/CD Pipelines</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>APIs & Workflows</h3>
+          <ul class="pill-list">
+            <li>REST APIs</li>
+            <li>Jira / Confluence</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>
+  <img src="icons/email.png" class="icon-img" alt="Email icon">
+  <a href="mailto:ftpaknejad@gmail.com">ftpaknejad@gmail.com</a>
+</p>
+
+<p>
+  <img src="icons/github.png" class="icon-img" alt="GitHub icon">
+  <a href="https://github.com/FPaknejad" target="_blank" rel="noreferrer">GitHub</a>
+  ·
+  <img src="icons/linkedin.png" class="icon-img" alt="LinkedIn icon">
+  <a href="https://www.linkedin.com/in/fatemeh-paknejad/" target="_blank" rel="noreferrer">LinkedIn</a>
+</p>
+    </section>
+  </main>
+
   <footer>
-    <p>&copy; 2025 Your Name</p>
+    <p>&copy; <span id="year"></span> Fatemeh Paknejad</p>
   </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
