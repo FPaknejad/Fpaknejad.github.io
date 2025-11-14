@@ -1,41 +1,107 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   margin: 0;
   padding: 0;
-  background: #f9f9f9;
-  color: #333;
+  background: #f4e9ff;
+  color: #635b6b;
+  line-height: 1.6;
 }
 
 header {
   text-align: center;
-  padding: 2rem;
-  background: #111;
-  color: white;
+  padding: 3rem 1rem;
+  background: #584769;
+  color: #f4e9ff;
 }
 
 nav a {
+  display: inline-block;
   margin: 0 10px;
-  color: #ffcc00;
+  color: #f6eeff;
   text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+main {
+  padding: 0 1rem 3rem;
 }
 
 section {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 1rem;
+  max-width: 1100px;
+  margin: 2.5rem auto 0;
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(99, 91, 107, 0.15);
 }
 
 .project-card {
-  background: white;
-  padding: 1rem;
-  margin: 1rem 0;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background: #e4d9f1;
+  color: #3e3943;
+  padding: 1.5rem;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: 0 20px 35px -20px rgba(99, 91, 107, 0.8);
+}
+
+.project-card h3 {
+  margin: 0;
+}
+
+.project-card a {
+  align-self: flex-start;
+  color: #3e3943;
+  background: #ecccf6;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.project-card a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(204, 246, 237, 0.65);
+}
+
+.project-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  margin-top: 1.5rem;
+}
+
+.pill-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+.pill-list li {
+  background: #e4d9f1;
+  color: #3e3943;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  font-weight: 600;
 }
 
 footer {
   text-align: center;
   padding: 1rem;
-  background: #111;
-  color: white;
+  background: #635b6b;
+  color: #f4e9ff;
+}
+
+.icon-img {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 0.4rem;
+  margin-left: 0.2rem;
 }
