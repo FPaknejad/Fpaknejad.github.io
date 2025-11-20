@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fatemeh Paknejad | Projects</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fatemeh Paknejad | Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
+
+  <!-- HEADER -->
   <header>
+    <button id="theme-toggle">🌙</button>
     <h1>Fatemeh Paknejad</h1>
-    <p>Software developer building practical tools for faster and smoother workflow.</p>
+    <p>I build tools that make my work faster, smoother, and easier.</p>
+
     <nav>
       <a href="#projects">Projects</a>
       <a href="#skills">Skills</a>
@@ -17,50 +22,57 @@
     </nav>
   </header>
 
+  <!-- MAIN -->
   <main>
+
+    <!-- ABOUT -->
     <section id="about">
       <h2>About Me</h2>
       <p>
-        Software Developer with experience in automotive software, C++ tooling, and workflow automation.  
-        Previously worked on Smart Access systems, AUTOSAR components, project management tooling,  
-        and productivity pipelines using C++, Python.  
-        I enjoy building practical tools, experimenting with new tech stacks, and turning small ideas into working software.
+        Software Developer with experience in automotive software, C++ tooling,
+        and workflow automation. Previously worked on Smart Access systems,
+        AUTOSAR components, engineering tooling, and productivity pipelines
+        using C++, Python, and Qt. I enjoy building practical tools, experimenting
+        with new technologies, and turning small ideas into working software.
       </p>
     </section>
 
+    <!-- PROJECTS -->
     <section id="projects">
       <h2>Projects</h2>
+
       <div class="project-grid">
+
+
         <article class="project-card">
           <h3>CSPPlugin</h3>
           <p>Custom Loupedeck plugin with commands for tool switching, zooming, layer visibility, and muting so I can drive Clip Studio entirely from the console.</p>
           <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/CSPPlugin" target="_blank" rel="noreferrer">View code</a>
         </article>
+
         <article class="project-card">
           <h3>Dictionary ChromeExtension</h3>
           <p> A Quick Dictionary that adds a context action that sends highlighted German words directly for instant translation.</p>
           <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/Dictionary%20ChromeExtension" target="_blank" rel="noreferrer">View code</a>
         </article>
+
         <article class="project-card">
           <h3>ExpenseTracker</h3>
           <p>Early-stage C++ expense tracker with an <code>Expense</code> model plus CLI/server scaffolding for logging purchases and categories.</p>
           <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/ExpenseTracker" target="_blank" rel="noreferrer">View code</a>
         </article>
+
         <article class="project-card">
           <h3>Hamdam</h3>
           <p>Swift/Xcode starter for the HamDam iOS concept. Currently just the asset catalog while I shape UX and features.</p>
           <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/Hamdam" target="_blank" rel="noreferrer">View code</a>
         </article>
         <article class="project-card">
-          <h3>Learning Stuff</h3>
-          <p>A grab bag of learning experiments—Flutter <code>testapp</code>, Swift playgrounds, Node/JavaScript practice, and a C++ full-stack demo.</p>
-          <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/Learning%20Stuff" target="_blank" rel="noreferrer">View code</a>
-        </article>
-        <article class="project-card">
           <h3>PipeNetwork</h3>
           <p>C++ simulation that ingests <code>pipedata.txt</code> to calculate flow rates for a Bavarian pipe network model.</p>
           <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/PipeNetwork" target="_blank" rel="noreferrer">View code</a>
         </article>
+
         <article class="project-card">
           <h3>Search ChromeExtension</h3>
           <p>“Multi-Tab Find” searches every open tab for a term and lets me walk results without leaving Chrome.</p>
@@ -68,25 +80,25 @@
         </article>
         <article class="project-card">
           <h3>Subtitle ChromeExtention</h3>
-          <p>“Dual Subtitles (Any Player)” injects stacked bilingual subtitles into any custom HTML5 video player.</p>
+          <p>“Dual Subtitles” injects stacked bilingual subtitles into any custom HTML5 video player.</p>
           <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/Subtitle%20ChromeExtention" target="_blank" rel="noreferrer">View code</a>
         </article>
+
         <article class="project-card">
           <h3>TaskManagerCLI</h3>
           <p>Menu-driven C++ task manager that adds, edits, filters, and persists todos through a simple repository interface.</p>
           <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/TaskManagerCLI" target="_blank" rel="noreferrer">View code</a>
         </article>
-        <article class="project-card">
-          <h3>Portfolio Landing Page</h3>
-          <p>This site—simple HTML/CSS that surfaces the projects above and mirrors the README descriptions.</p>
-          <a href="https://github.com/FPaknejad/Fpaknejad.github.io" target="_blank" rel="noreferrer">View repo</a>
-        </article>
+
       </div>
     </section>
 
+    <!-- SKILLS -->
     <section id="skills">
       <h2>Skills Snapshot</h2>
+
       <div class="skills-grid">
+
         <div>
           <h3>Programming</h3>
           <ul class="pill-list">
@@ -109,7 +121,7 @@
           <h3>DevOps & Tools</h3>
           <ul class="pill-list">
             <li>Docker</li>
-            <li>Git & GitHub Actions</li>
+            <li>GitHub Actions</li>
             <li>CI/CD Pipelines</li>
           </ul>
         </div>
@@ -121,32 +133,47 @@
             <li>Jira / Confluence</li>
           </ul>
         </div>
+
       </div>
     </section>
 
+    <!-- CONTACT -->
     <section id="contact">
       <h2>Contact</h2>
-      <p>
-  <img src="icons/email.png" class="icon-img" alt="Email icon">
-  <a href="mailto:ftpaknejad@gmail.com">ftpaknejad@gmail.com</a>
-</p>
 
-<p>
-  <img src="icons/github.png" class="icon-img" alt="GitHub icon">
-  <a href="https://github.com/FPaknejad" target="_blank" rel="noreferrer">GitHub</a>
-  ·
-  <img src="icons/linkedin.png" class="icon-img" alt="LinkedIn icon">
-  <a href="https://www.linkedin.com/in/fatemeh-paknejad/" target="_blank" rel="noreferrer">LinkedIn</a>
-</p>
+      <p>
+        <img src="icons/email.png" class="icon-img" alt="" />
+        <a href="mailto:ftpaknejad@gmail.com">ftpaknejad@gmail.com</a>
+      </p>
+
+      <p>
+        <img src="icons/github.png" class="icon-img" alt="" />
+        <a href="https://github.com/FPaknejad" target="_blank">GitHub</a>
+        ·
+        <img src="icons/linkedin.png" class="icon-img" alt="" />
+        <a href="https://www.linkedin.com/in/fatemeh-paknejad/" target="_blank">LinkedIn</a>
+      </p>
+
     </section>
+
   </main>
 
+  <!-- FOOTER -->
   <footer>
     <p>&copy; <span id="year"></span> Fatemeh Paknejad</p>
   </footer>
 
+  <!-- SCRIPTS -->
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const toggle = document.getElementById("theme-toggle");
+    toggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      toggle.textContent =
+        document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
+    });
   </script>
+
 </body>
 </html>
