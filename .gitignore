@@ -1,26 +1,28 @@
-# ---------- Project-specific ----------
-# Ignore built outputs and temp folders
-/CSPPlugin/bin/
-/CSPPlugin/obj/
-/CSPPlugin/src/Helpers/
-/CSPPlugin/src/obj/
-/CSPPlugin/src/package/.DS_Store
-/CSPPlugin/src/.DS_Store
-/CSPPlugin/.DS_Store
+#############################################
+# OS / SYSTEM JUNK
+#############################################
+.DS_Store
+Thumbs.db
+*.plist
 
-# Ignore compiled artifacts
-*.dll
-*.pdb
-*.o
-*.a
-*.so
-*.exe
-*.bin
-*.d
-*.cache
-*.Up2Date
+#############################################
+# IDE / EDITORS
+#############################################
+.vscode/
+.idea/
+*.suo
+*.user
+*.code-workspace
+*.vcxproj*
+*.sln
+*.ipch
+*.ilk
+*.sdf
 
-# ---------- Common build systems ----------
+#############################################
+# BUILD SYSTEM ARTIFACTS (CMake, Make, Ninja)
+#############################################
+
 # CMake
 CMakeCache.txt
 CMakeFiles/
@@ -29,57 +31,78 @@ Makefile
 *.cmake
 *.make
 
-# ---------- IDEs ----------
-.vscode/
-.idea/
-*.suo
-*.user
-*.vcxproj.*
-*.code-workspace
+# Ninja
+*.ninja
+*.ninja_deps
+*.ninja_log
 
-# ---------- System ----------
-.DS_Store
-Thumbs.db
+# Generic build dirs
+/build/
+*/build/
 
-# ---------- Test / coverage ----------
+#############################################
+# COMPILED ARTIFACTS
+#############################################
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+*.bin
+*.d
+*.cache
+*.Up2Date
+
+# macOS debug symbols
+*.dSYM/
+
+#############################################
+# UNIT TEST / COVERAGE
+#############################################
 *.gcda
 *.gcno
 *.gcov
 coverage/
+CTestTestfile.cmake
+Testing/
 
-# ---------- Optional formats ----------
-*.json
+#############################################
+# PROJECT-SPECIFIC (CLEANED & GROUPED)
+#############################################
+
+# CSPPlugin
+CSPPlugin/bin/
+CSPPlugin/obj/
+CSPPlugin/src/obj/
+CSPPlugin/src/package/
+CSPPlugin/src/Helpers/
+CSPPlugin/*.DS_Store
+
+# PipeNetwork
+PipeNetwork/pipenetwork/Debug/
+PipeNetwork/pipenetwork/pipenetwork.vcxproj
+PipeNetwork/pipenetwork.sln
+
+# TaskManagerCLI CTest output + builds
+TaskManagerCLI/build/
+
+# Misc Folders
+Learning Stuff/
+DictionaryExtension/
+cpp_template/cpp_template_macOS/build/
+/Dictionary ChromeExtension/.scraps
+/ExpenseTracker/data
+/Hamdam/HamDam/HamDam/Assets.xcassets
+
+#############################################
+
 *.ts
 *.editorconfig
 *.props
 *.targets
-/PipeNetwork/pipenetwork/Debug
 *.db
-*.sdf
-*.ipch
-*.ilk
-PipeNetwork/pipenetwork/pipenetwork.vcxproj
-PipeNetwork/pipenetwork.sln
-TaskManagerCLI/build/.ninja_deps
-TaskManagerCLI/build/.ninja_log
-TaskManagerCLI/build/app
-TaskManagerCLI/build/build.ninja
-TaskManagerCLI/build/Testing/20251023-2346/Test.xml
-TaskManagerCLI/build/Testing/TAG
-TaskManagerCLI/build/Testing/Temporary/CTestCostData.txt
-TaskManagerCLI/build/Testing/Temporary/LastTest.log
-TaskManagerCLI/build/Testing/Temporary/LastTest_20251023-2346.log
-TaskManagerCLI/build/Testing/Temporary/LastTestsFailed.log
-TaskManagerCLI/build/tests/TaskManagerTest
-TaskManagerCLI/build/tests/TaskTest
-/Learning Stuff
-/DictionaryExtension
-
-*.ninja_deps
-*.nija_log
 app
-*.ninja
-/cpp_template/cpp_template_macOS/build
-cpp_template/cpp_template_macOS/src/main.dSYM/Contents/Resources/DWARF/main
-*.plist
-/cpp_template/cpp_template_macOS/src/main.dSYM
+*.pdb
+
