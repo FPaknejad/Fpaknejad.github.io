@@ -74,3 +74,12 @@ TaskManagerCLI/build/tests/TaskManagerTest
 TaskManagerCLI/build/tests/TaskTest
 /Learning Stuff
 /DictionaryExtension
+
+*.ninja_deps
+*.nija_log
+app
+*.ninja
+/cpp_template/cpp_template_macOS/build
+cpp_template/cpp_template_macOS/src/main.dSYM/Contents/Resources/DWARF/main
+*.plist
+/cpp_template/cpp_template_macOS/src/main.dSYM
