@@ -106,3 +106,4 @@ cpp_template/cpp_template_macOS/build/
 app
 *.pdb
 
+NotesApp/nul
