@@ -9,16 +9,17 @@
 
 using namespace handnote::core;
 
+// ---------------------------------------------------
+// Optional: JSON test wrapped into a function
+// ---------------------------------------------------
 void runJsonTest()
 {
-    // --- JSON debug test ---
     QString dataDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QDir().mkpath(dataDir);
     QString jsonPath = dataDir + "/notes_test.json";
 
     LocalFileNoteRepository repo(jsonPath);
 
-    // Create sample notebook
     Notebook nb;
     nb.id = QUuid::createUuid();
     nb.name = "Test Notebook";
@@ -51,22 +52,39 @@ void runJsonTest()
     sec.pages.append(page);
     nb.sections.append(sec);
 
-    QList<Notebook> notebooks { nb };
+    QList<Notebook> notebooks;
+    notebooks.append(nb);
 
     qDebug() << "Saving test JSON to:" << jsonPath;
     repo.saveAll(notebooks);
 
-    qDebug() << "JSON TEST COMPLETE\n";
+    auto loaded = repo.loadAll();
+    qDebug() << "Loaded" << loaded.size() << "notebooks.";
+    if (!loaded.isEmpty()) {
+        auto &n = loaded.first();
+        qDebug() << "Notebook name:" << n.name;
+        qDebug() << "Sections:" << n.sections.size();
+        qDebug() << "Pages in first section:" << n.sections.first().pages.size();
+        const auto &p2 = n.sections.first().pages.first();
+        qDebug() << "Linespacing:" << p2.tmpl.lineSpacing;
+        qDebug() << "Strokes:" << p2.strokes.size();
+        qDebug() << "TextBlocks:" << p2.textBlocks.size();
+    }
+
+    qDebug() << "\nJSON TEST COMPLETE — no crash means model is good!\n";
 }
 
+// ---------------------------------------------------
+// REAL APPLICATION STARTS HERE
+// ---------------------------------------------------
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    // optional debugging
+    // Run the test (non-blocking)
     runJsonTest();
 
-    // GUI starts here
+    // Now start the UI
     MainWindow w;
     w.show();
 

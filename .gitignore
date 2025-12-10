@@ -107,3 +107,5 @@ app
 *.pdb
 
 NotesApp/nul
+/NotesApp/builds
+NotesApp/src.zip

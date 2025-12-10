@@ -1,4 +1,4 @@
-#include "HandwritingCanvas.h"
+#include "HandwritingCanvas.hpp"
 
 #include <QMouseEvent>
 #include <QPainter>
