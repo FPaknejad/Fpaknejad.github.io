@@ -1,74 +1,68 @@
 #include <QApplication>
-#include <QDebug>
-#include <QStandardPaths>
 #include <QDir>
+#include <QStandardPaths>
+#include <memory>
 
 #include "MainWindow.hpp"
 #include "core/LocalFileNoteRepository.hpp"
-#include "core/NoteModel.hpp"
+#include "domain/NoteModel.hpp"
+#include "services/NoteService.hpp"
+#include "services/TreeSyncService.hpp"
+#include "services/HandwritingService.hpp"
+#include "services/AuthService.hpp"
 
 using namespace handnote::core;
-
-void runJsonTest()
-{
-    // --- JSON debug test ---
-    QString dataDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    QDir().mkpath(dataDir);
-    QString jsonPath = dataDir + "/notes_test.json";
-
-    LocalFileNoteRepository repo(jsonPath);
-
-    // Create sample notebook
-    Notebook nb;
-    nb.id = QUuid::createUuid();
-    nb.name = "Test Notebook";
-
-    Section sec;
-    sec.id = QUuid::createUuid();
-    sec.name = "My Section";
-
-    Page page;
-    page.id = QUuid::createUuid();
-    page.title = "My Test Page";
-
-    page.tmpl.type = PageTemplate::Type::Lined;
-    page.tmpl.topMargin = 50.0f;
-    page.tmpl.lineSpacing = 20.0f;
-
-    Stroke s;
-    s.id = QUuid::createUuid();
-    s.points.append({10, 20, 0.8f, 123});
-    s.points.append({15, 25, 0.9f, 133});
-    page.strokes.append(s);
-
-    TextBlock tb;
-    tb.id = QUuid::createUuid();
-    tb.text = "Hello world";
-    tb.boundingBox = QRectF(100, 150, 200, 40);
-    tb.lineIndex = 3;
-    page.textBlocks.append(tb);
-
-    sec.pages.append(page);
-    nb.sections.append(sec);
-
-    QList<Notebook> notebooks { nb };
-
-    qDebug() << "Saving test JSON to:" << jsonPath;
-    repo.saveAll(notebooks);
-
-    qDebug() << "JSON TEST COMPLETE\n";
-}
+using namespace handnote::services;
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    // optional debugging
-    runJsonTest();
+    // -----------------------------------------------------
+    // Setup storage path
+    // -----------------------------------------------------
+    const QString appDataDir =
+        QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 
-    // GUI starts here
-    MainWindow w;
-    w.show();
+    QDir dir(appDataDir);
+    if (!dir.exists()) {
+        dir.mkpath(QStringLiteral("."));
+    }
 
-    return app.exec();
+    const QString notebookPath = dir.filePath(QStringLiteral("notebook.json"));
+
+    // -----------------------------------------------------
+    // Repository + Model
+    // -----------------------------------------------------
+    NoteModel model;
+    auto repository = std::make_unique<LocalFileNoteRepository>(notebookPath);
+    auto syncService = std::make_shared<TreeSyncService>();
+    AuthService authService;
+    authService.restoreLastSession();
+    syncService->setEnabled(authService.isSignedIn());
+    NoteService noteService(model, std::move(repository), syncService);
+    HandwritingService handwritingService;
+
+    noteService.enableCloudSync(syncService->isEnabled());
+
+    noteService.load();
+    if (noteService.notebooks().isEmpty()) {
+        noteService.createNotebook(QStringLiteral("My Notebook"));
+        noteService.persistNow();
+    }
+
+    // -----------------------------------------------------
+    // UI
+    // -----------------------------------------------------
+    MainWindow mainWindow(model, noteService, handwritingService);
+    mainWindow.show();
+
+    const int result = app.exec();
+
+    // Save current state before exit.
+    if (!noteService.notebooks().isEmpty()) {
+        noteService.persistNow();
+    }
+
+    return result;
 }

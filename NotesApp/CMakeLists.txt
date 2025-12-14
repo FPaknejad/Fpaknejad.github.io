@@ -9,27 +9,40 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
+set(CMAKE_PREFIX_PATH "C:/Qt/6.10.1/msvc2022_64")
 find_package(Qt6 REQUIRED COMPONENTS Widgets Core Gui)
+# find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
 
-
-qt_add_executable(HandNoteApp
+set(SOURCES
     src/main.cpp
 
-    src/MainWindow.hpp
-    src/MainWindow.cpp
-
-    src/core/NoteModel.hpp
-    src/core/NoteModel.cpp
-
-    src/core/NoteRepository.hpp
-
-    src/core/LocalFileNoteRepository.hpp
     src/core/LocalFileNoteRepository.cpp
+    src/core/NoteRepository.cpp
 
-    src/HandwritingCanvas.hpp
-    src/HandwritingCanvas.cpp
+    src/ui/MainWindow.cpp
+    src/ui/NoteTreePanel.cpp
+    src/ui/PageWorkspace.cpp
+    src/ui/SidebarTreeView.cpp
+    src/ui/TextEditorWidget.cpp
+    src/ui/HandwritingCanvas.cpp
+    src/ui/PageToolbar.cpp
+
+    src/controller/NoteController.cpp
+
+    src/domain/NoteModel.cpp
+    src/domain/NoteTypes.cpp
+    src/domain/Sorting.cpp
+    src/domain/NoteCommands.cpp
+
+    src/persistence/JsonSerializer.cpp
+
+    src/services/TreeSyncService.cpp
+    src/services/NoteService.cpp
+    src/services/HandwritingService.cpp
+    src/services/AuthService.cpp
 )
+
+add_executable(HandNoteApp ${SOURCES})
 
 target_link_libraries(HandNoteApp 
     PRIVATE
@@ -39,8 +52,15 @@ target_link_libraries(HandNoteApp
 )
 
 target_include_directories(HandNoteApp PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${CMAKE_SOURCE_DIR}/src
+        ${CMAKE_SOURCE_DIR}/src/ui
+        ${CMAKE_SOURCE_DIR}/src/controller
+        ${CMAKE_SOURCE_DIR}/src/domain
+        ${CMAKE_SOURCE_DIR}/src/persistence
+        ${CMAKE_SOURCE_DIR}/src/services
 )
+
+
 
 if (APPLE)
     set_target_properties(HandNoteApp PROPERTIES

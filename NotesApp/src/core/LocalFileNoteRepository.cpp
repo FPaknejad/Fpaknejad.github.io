@@ -1,74 +1,65 @@
 #include "LocalFileNoteRepository.hpp"
-
 #include <QFile>
+#include <QSaveFile>
 #include <QJsonDocument>
+#include <QJsonObject>
 #include <QJsonArray>
 
-namespace handnote::core {
+using namespace handnote::core;
 
-LocalFileNoteRepository::LocalFileNoteRepository(QString filePath,
-                                                 QObject *parent)
-    : NoteRepository(parent),
-      m_filePath(std::move(filePath))
+LocalFileNoteRepository::LocalFileNoteRepository(const QString& filePath, QObject* parent)
+    : NoteRepository(parent), m_filePath(filePath) {}
+
+LocalFileNoteRepository::LocalFileNoteRepository(QObject* parent)
+    : NoteRepository(parent) {}
+
+Notebook LocalFileNoteRepository::loadAll()
 {
+    return loadNotebook(m_filePath);
 }
 
-QList<Notebook> LocalFileNoteRepository::loadAll()
+void LocalFileNoteRepository::saveAll(const Notebook& notebook)
 {
-    QList<Notebook> notebooks;
+    saveNotebook(m_filePath, notebook);
+}
 
-    QFile file(m_filePath);
-    if (!file.exists()) {
-        return notebooks; // empty, first run
-    }
+// Helper
+Notebook LocalFileNoteRepository::loadNotebook(const QString& path)
+{
+    Notebook notebook;
+    QFile file(path);
 
-    if (!file.open(QIODevice::ReadOnly)) {
-        // could log error later
-        return notebooks;
-    }
+    if (path.isEmpty())
+        return notebook;
 
-    const QByteArray data = file.readAll();
+    if (!file.exists())
+        return notebook;
+
+    if (!file.open(QIODevice::ReadOnly))
+        return notebook;
+
+    QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
     file.close();
 
-    QJsonParseError err{};
-    const QJsonDocument doc = QJsonDocument::fromJson(data, &err);
-    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
-        return notebooks;
-    }
+    if (!doc.isObject())
+        return notebook;
 
-    const QJsonObject root = doc.object();
-    const QJsonArray arr = root["notebooks"].toArray();
-
-    notebooks.reserve(arr.size());
-    for (const auto &v : arr) {
-        notebooks.append(notebookFromJson(v.toObject()));
-    }
-
-    return notebooks;
+    notebook = notebookFromJson(doc.object());
+    return notebook; // return the deserialized notebook
 }
 
-bool LocalFileNoteRepository::saveAll(const QList<Notebook> &notebooks)
+void LocalFileNoteRepository::saveNotebook(const QString& path,
+                                           const Notebook& notebook)
 {
-    QJsonArray arr;
-    // QJsonArray does not provide reserve(); it grows dynamically as elements are appended.
-    // arr.reserve(notebooks.size());
-    for (const auto &n : notebooks) {
-        arr.append(toJson(n));
-    }
+    if (path.isEmpty())
+        return;
 
-    QJsonObject root;
-    root["notebooks"] = arr;
+    QSaveFile file(path);
 
-    const QJsonDocument doc(root);
+    if (!file.open(QIODevice::WriteOnly))
+        return;
 
-    QFile file(m_filePath);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        return false;
-    }
-
-    file.write(doc.toJson(QJsonDocument::Indented));
-    file.close();
-    return true;
+    QJsonDocument doc(notebookToJson(notebook));
+    file.write(doc.toJson(QJsonDocument::Compact));
+    file.commit();
 }
-
-} // namespace handnote::core

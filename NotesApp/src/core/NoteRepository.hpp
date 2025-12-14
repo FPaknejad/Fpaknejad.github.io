@@ -1,23 +1,24 @@
 #pragma once
-
 #include <QObject>
-#include <QList>
-#include "NoteModel.hpp"
+#include <QString>
 
 namespace handnote::core {
+
+struct Notebook;
 
 class NoteRepository : public QObject
 {
     Q_OBJECT
 public:
-    explicit NoteRepository(QObject *parent = nullptr)
-        : QObject(parent)
-    {}
+    using QObject::QObject;
 
-    ~NoteRepository() override = default;
+    virtual Notebook loadAll() = 0;
+    virtual void saveAll(const Notebook& notebook) = 0;
 
-    virtual QList<Notebook> loadAll() = 0;
-    virtual bool saveAll(const QList<Notebook> &notebooks) = 0;
+    virtual Notebook loadNotebook(const QString& path) = 0;
+    virtual void saveNotebook(const QString& path, const Notebook& notebook) = 0;
+
+    virtual ~NoteRepository() = default;
 };
 
 } // namespace handnote::core
