@@ -19,6 +19,9 @@
 *.d
 *.cache
 *.Up2Date
+.DS_Store
+**/.DS_Store
+
 
 # ---------- Common build systems ----------
 # CMake

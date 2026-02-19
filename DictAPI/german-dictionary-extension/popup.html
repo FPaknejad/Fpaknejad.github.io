@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>German Dictionary Translator</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="app">
+      <h1 class="title">German Dictionary</h1>
+      <form id="lookup-form" class="search-row">
+        <input
+          id="word-input"
+          type="text"
+          placeholder="Enter a German word"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button id="lookup-btn" type="submit">Translate</button>
+      </form>
+
+      <p id="status" class="status">Select a German word on a page, or type one above.</p>
+      <section id="result" class="result"></section>
+    </main>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
