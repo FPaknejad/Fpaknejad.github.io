@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "German Dictionary Translator",
+  "version": "1.0.0",
+  "description": "Translate highlighted German words to English and show noun/verb grammar details.",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://de.wiktionary.org/*"
+  ],
+  "action": {
+    "default_title": "German Dictionary Translator",
+    "default_popup": "popup.html"
+  }
+}
