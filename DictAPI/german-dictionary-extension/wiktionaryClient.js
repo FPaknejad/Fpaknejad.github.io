@@ -245,6 +245,7 @@ async function buildDerivedVariantStates(candidates, limit = 30) {
 }
 
 function mergeResult(primary, fallback, note) {
+  const mergedExamples = mergeUnknownFields(primary.examples, fallback.examples);
   const mergedVerbInfo = mergeUnknownFields(primary.verbInfo, fallback.verbInfo);
   const mergedNounInfo = mergeUnknownFields(primary.nounInfo, fallback.nounInfo);
   const merged = {
@@ -253,6 +254,7 @@ function mergeResult(primary, fallback, note) {
       primary.translations.length > 0
         ? primary.translations
         : fallback.translations,
+    examples: mergedExamples,
     nounInfo: mergedNounInfo,
     verbInfo: mergedVerbInfo,
     notes: [...(primary.notes || [])]

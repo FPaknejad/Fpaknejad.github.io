@@ -1,4 +1,5 @@
 import { lookupGermanWord } from "./wiktionaryClient.js";
+import { highlightExampleText } from "./exampleHighlight.js";
 
 const form = document.getElementById("lookup-form");
 const input = document.getElementById("word-input");
@@ -100,6 +101,63 @@ function renderPerfectValue(verbInfo) {
   }
 
   return escapeHtml(`ich ${auxiliaries[0]} ${participle}`);
+}
+
+function hideTooltip(target) {
+  const tooltip = target?.querySelector(".tooltip");
+  if (!tooltip) {
+    return;
+  }
+  tooltip.classList.remove("tooltip-visible");
+}
+
+function positionTooltip(target) {
+  const tooltip = target?.querySelector(".tooltip");
+  if (!tooltip) {
+    return;
+  }
+
+  tooltip.classList.add("tooltip-visible");
+  tooltip.style.left = "0px";
+  tooltip.style.top = "0px";
+
+  const margin = 8;
+  const gap = 8;
+  const targetRect = target.getBoundingClientRect();
+  const tooltipRect = tooltip.getBoundingClientRect();
+
+  let left = targetRect.left;
+  let top = targetRect.top - tooltipRect.height - gap;
+
+  if (left + tooltipRect.width > window.innerWidth - margin) {
+    left = window.innerWidth - margin - tooltipRect.width;
+  }
+  if (left < margin) {
+    left = margin;
+  }
+
+  if (top < margin) {
+    top = targetRect.bottom + gap;
+  }
+  if (top + tooltipRect.height > window.innerHeight - margin) {
+    top = window.innerHeight - margin - tooltipRect.height;
+  }
+  if (top < margin) {
+    top = margin;
+  }
+
+  tooltip.style.left = `${Math.round(left)}px`;
+  tooltip.style.top = `${Math.round(top)}px`;
+}
+
+function attachTooltipHandlers() {
+  const hoverTargets = resultEl.querySelectorAll(".hover-target");
+  for (const target of hoverTargets) {
+    target.addEventListener("mouseenter", () => positionTooltip(target));
+    target.addEventListener("mouseleave", () => hideTooltip(target));
+    target.addEventListener("focusin", () => positionTooltip(target));
+    target.addEventListener("focusout", () => hideTooltip(target));
+  }
 }
 
 function renderIdle(message) {
@@ -205,6 +263,26 @@ function renderSuccess(result) {
           .join("")}</ul></div>`
       : "";
 
+  const examples = Array.isArray(result?.examples) ? result.examples : [];
+  const examplesHtml =
+    examples.length > 0
+      ? `
+      <div class="card">
+        <h2>Examples</h2>
+        <ul class="notes">
+          ${examples
+            .slice(0, 5)
+            .map((example) => {
+              const de = highlightExampleText(example?.de || "", result);
+              const en = example?.en ? ` <span class="example-en">- ${escapeHtml(example.en)}</span>` : "";
+              return de ? `<li>${de}${en}</li>` : "";
+            })
+            .join("")}
+        </ul>
+      </div>
+    `
+      : "";
+
   const derivedVariantStates = Array.isArray(result.derivedVariantStates)
     ? result.derivedVariantStates
     : Array.isArray(result.validDerivedVariants)
@@ -240,9 +318,12 @@ function renderSuccess(result) {
     </div>
     ${nounHtml}
     ${verbHtml}
+    ${examplesHtml}
     ${derivedHtml}
     ${notesHtml}
   `;
+
+  attachTooltipHandlers();
 }
 
 function speakWord(word) {

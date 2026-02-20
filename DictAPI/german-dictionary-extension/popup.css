@@ -179,6 +179,11 @@ body {
   background: #f4f6fa;
 }
 
+.example-en {
+  color: #5d6c83;
+  font-style: italic;
+}
+
 .hover-target {
   position: relative;
   border-bottom: 1px dashed #8aa1be;
@@ -186,10 +191,10 @@ body {
 }
 
 .tooltip {
-  position: absolute;
+  position: fixed;
   z-index: 20;
   left: 0;
-  bottom: calc(100% + 8px);
+  top: 0;
   min-width: 180px;
   max-width: 240px;
   display: none;
@@ -201,9 +206,10 @@ body {
   font-size: 12px;
   line-height: 1.35;
   color: #1c2430;
+  pointer-events: none;
 }
 
-.hover-target:hover .tooltip {
+.tooltip.tooltip-visible {
   display: block;
 }
 
@@ -213,7 +219,7 @@ body {
   margin-top: 6px;
   border: 1px solid #d9e2ee;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: visible;
   font-size: 13px;
 }
 

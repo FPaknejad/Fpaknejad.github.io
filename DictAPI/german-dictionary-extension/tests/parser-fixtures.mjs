@@ -210,6 +210,60 @@ export const fixtures = [
         "unterbegriffe includes mithelfen"
       );
     }
+  },
+  {
+    name: "examples_extract_section_limit",
+    sourceWord: "kommen",
+    title: "kommen",
+    wikitext: `
+== kommen (Deutsch) ==
+{{Wortart|Verb|Deutsch}}
+=== Beispiele ===
+:[1] Ich komme heute.
+:[2] Wir kommen morgen.
+:[3] Er kommt spaet.
+:[4] Kommt ihr auch?
+:[5] Sie kommen zusammen.
+:[6] Das kommt selten vor.
+`,
+    assert(result, helpers) {
+      helpers.expectEqual(
+        Array.isArray(result.examples),
+        true,
+        "examples should be array"
+      );
+      helpers.expectEqual(result.examples.length, 5, "examples max 5");
+      helpers.expectEqual(
+        result.examples[0]?.de,
+        "Ich komme heute.",
+        "first example"
+      );
+    }
+  },
+  {
+    name: "examples_extract_with_english_gloss",
+    sourceWord: "ankommen",
+    title: "ankommen",
+    wikitext: `
+== ankommen (Deutsch) ==
+{{Wortart|Verb|Deutsch}}
+{{Beispiele}}
+:[1] Es kommt darauf an. — It depends.
+:[2] Ich komme spaet an.
+`,
+    assert(result, helpers) {
+      helpers.expectEqual(result.examples.length, 2, "example count");
+      helpers.expectEqual(
+        result.examples[0]?.de,
+        "Es kommt darauf an.",
+        "example de"
+      );
+      helpers.expectEqual(
+        result.examples[0]?.en,
+        "It depends.",
+        "example en"
+      );
+    }
   }
 ];
 

@@ -382,6 +382,98 @@ export function extractTranslations(wikitext) {
   return dedupe(linkMatches).slice(0, 10);
 }
 
+function looksLikeEnglishText(value) {
+  const text = String(value || "").toLowerCase();
+  if (!/[a-z]/.test(text)) {
+    return false;
+  }
+  return /\b(the|and|to|of|is|are|it|you|we|they|i|a|an|on|for|with|in)\b/.test(
+    text
+  );
+}
+
+function extractExamplesFromZone(zone, examples) {
+  if (!zone) {
+    return;
+  }
+
+  const lines = String(zone)
+    .split("\n")
+    .map((line) => line.trim());
+
+  for (const line of lines) {
+    if (!line) {
+      continue;
+    }
+    if (/^{{[^}]+}}$/.test(line)) {
+      continue;
+    }
+
+    const withoutPrefix = line.replace(
+      /^[:*#;\s]*(?:\[\d+\]|\d+\.)?\s*/,
+      ""
+    );
+    const cleanedLine = cleanupValue(withoutPrefix);
+    if (isUnknown(cleanedLine)) {
+      continue;
+    }
+
+    let de = cleanedLine;
+    let en;
+    const parts = cleanedLine.split(/\s+[—–-]\s+/);
+    if (parts.length >= 2) {
+      const left = cleanupValue(parts[0]);
+      const right = cleanupValue(parts.slice(1).join(" - "));
+      if (!isUnknown(left) && !isUnknown(right)) {
+        de = left;
+        if (looksLikeEnglishText(right)) {
+          en = right;
+        }
+      }
+    }
+
+    if (examples.some((item) => item.de === de)) {
+      continue;
+    }
+    examples.push(en ? { de, en } : { de });
+    if (examples.length >= 5) {
+      return;
+    }
+  }
+}
+
+export function extractExamples(wikitext) {
+  const examples = [];
+
+  const examplesSection = extractSection(wikitext, "Beispiele");
+  extractExamplesFromZone(examplesSection, examples);
+
+  if (examples.length < 5) {
+    const templateBlockRegex =
+      /{{\s*Beispiele\s*}}([\s\S]*?)(?=\n{{\s*[A-ZÄÖÜa-zäöü][^}]*}}|\n==+|$)/gi;
+    let match;
+    while ((match = templateBlockRegex.exec(wikitext)) !== null) {
+      extractExamplesFromZone(match[1], examples);
+      if (examples.length >= 5) {
+        break;
+      }
+    }
+  }
+
+  if (examples.length < 5) {
+    const lineRegex = /^\s*[:*#]\s*(?:\[\d+\]|\d+\.)\s*(.+)$/gm;
+    let match;
+    while ((match = lineRegex.exec(wikitext)) !== null) {
+      extractExamplesFromZone(match[1], examples);
+      if (examples.length >= 5) {
+        break;
+      }
+    }
+  }
+
+  return examples.slice(0, 5);
+}
+
 export function extractNounInfo(wikitext) {
   const hasNounMarker =
     /{{\s*Wortart\|Substantiv\|Deutsch/i.test(wikitext) ||
@@ -900,6 +992,10 @@ export function parseEntry({
 }) {
   const partOfSpeech = detectPartOfSpeech(wikitext);
   const translations = extractTranslations(wikitext);
+  const examples = mergeUnknownFields(
+    extractExamples(wikitext),
+    fallback?.examples
+  );
   const derivedVariants = mergeUnknownFields(
     extractDerivedVariants(wikitext, title),
     fallback?.derivedVariants
@@ -924,6 +1020,7 @@ export function parseEntry({
     title,
     partOfSpeech,
     translations: finalTranslations,
+    examples,
     derivedVariants,
     nounInfo,
     verbInfo,
