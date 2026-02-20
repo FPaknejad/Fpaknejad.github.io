@@ -7,6 +7,8 @@ import {
 const BASE_URL = "https://de.wiktionary.org/w/api.php";
 const API_USER_AGENT =
   "GermanDictionaryExtension/1.0 (local Chrome extension; contact: local-user)";
+const variantTranslationCache = new Map();
+const derivedVariantStateCache = new Map();
 
 function normalizeTitle(value) {
   return String(value || "")
@@ -160,19 +162,52 @@ async function validateDerivedVariants(candidates, limit = 20) {
 }
 
 async function checkVariantHasEnglishTranslations(term) {
-  const results = await searchTitles(term);
-  const bestTitle = pickBestTitle(results, term);
-  if (!bestTitle) {
-    return false;
+  const cacheKey = normalizeTitle(term);
+  if (variantTranslationCache.has(cacheKey)) {
+    return variantTranslationCache.get(cacheKey);
   }
 
-  const wikitext = await fetchWikitext(bestTitle);
-  const parsed = parseEntry({
-    sourceWord: term,
-    title: bestTitle,
-    wikitext
-  });
-  return Array.isArray(parsed.translations) && parsed.translations.length > 0;
+  let hasTranslations = false;
+  try {
+    // Use direct parse lookup to avoid extra search/query round-trips.
+    const wikitext = await fetchWikitext(term);
+    const parsed = parseEntry({
+      sourceWord: term,
+      title: term,
+      wikitext
+    });
+    hasTranslations =
+      Array.isArray(parsed.translations) && parsed.translations.length > 0;
+  } catch {
+    hasTranslations = false;
+  }
+
+  variantTranslationCache.set(cacheKey, hasTranslations);
+  return hasTranslations;
+}
+
+async function mapWithConcurrency(items, limit, mapper) {
+  const result = new Array(items.length);
+  let nextIndex = 0;
+
+  async function worker() {
+    while (true) {
+      const current = nextIndex;
+      nextIndex += 1;
+      if (current >= items.length) {
+        return;
+      }
+      result[current] = await mapper(items[current], current);
+    }
+  }
+
+  const workers = [];
+  const size = Math.max(1, Math.min(limit, items.length));
+  for (let i = 0; i < size; i += 1) {
+    workers.push(worker());
+  }
+  await Promise.all(workers);
+  return result;
 }
 
 async function buildDerivedVariantStates(candidates, limit = 30) {
@@ -194,17 +229,19 @@ async function buildDerivedVariantStates(candidates, limit = 30) {
     }
     seen.add(key);
 
-    let clickable = false;
-    try {
-      clickable = await checkVariantHasEnglishTranslations(term);
-    } catch {
-      clickable = false;
-    }
-
-    states.push({ term, clickable });
+    states.push({ term, clickable: false });
   }
 
-  return states;
+  const clickableFlags = await mapWithConcurrency(
+    states.map((item) => item.term),
+    6,
+    async (term) => checkVariantHasEnglishTranslations(term)
+  );
+
+  return states.map((item, index) => ({
+    term: item.term,
+    clickable: Boolean(clickableFlags[index])
+  }));
 }
 
 function mergeResult(primary, fallback, note) {
@@ -277,10 +314,12 @@ export async function lookupGermanWord(word) {
   }
 
   try {
-    const variantStates = await buildDerivedVariantStates(
-      parsed.derivedVariants,
-      30
-    );
+    const derivedCacheKey = normalizeTitle(parsed.title);
+    let variantStates = derivedVariantStateCache.get(derivedCacheKey);
+    if (!variantStates) {
+      variantStates = await buildDerivedVariantStates(parsed.derivedVariants, 30);
+      derivedVariantStateCache.set(derivedCacheKey, variantStates);
+    }
     parsed.derivedVariantStates = variantStates;
     parsed.validDerivedVariants = variantStates
       .filter((item) => item.clickable)
