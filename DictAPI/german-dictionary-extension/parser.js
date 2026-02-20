@@ -1,11 +1,16 @@
 const UNKNOWN = "Unknown";
 
+function escapeRegexToken(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 function cleanupValue(value) {
   if (!value) {
     return UNKNOWN;
   }
 
   let cleaned = value.trim();
+  cleaned = cleaned.replace(/&nbsp;/gi, " ");
   cleaned = cleaned.replace(/<!--.*?-->/g, "");
   cleaned = cleaned.replace(/<ref[^>]*>[\s\S]*?<\/ref>/gi, "");
   cleaned = cleaned.replace(/<[^>]+>/g, "");
@@ -22,8 +27,9 @@ function cleanupValue(value) {
 }
 
 function extractSection(wikitext, heading) {
+  const escapedHeading = escapeRegexToken(heading);
   const pattern = new RegExp(
-    `==+\\s*${heading}\\s*==+([\\s\\S]*?)(\\n==+[^=\\n]+==+|$)`,
+    `(?:^|\\n)==+\\s*${escapedHeading}\\s*==+([\\s\\S]*?)(?:\\n==+[^=\\n]+==+|$)`,
     "i"
   );
   const match = wikitext.match(pattern);
@@ -318,22 +324,62 @@ export function detectPartOfSpeech(wikitext) {
 }
 
 export function extractTranslations(wikitext) {
+  const matches = [];
+  const collectFromZone = (zone) => {
+    if (!zone) {
+      return;
+    }
+
+    const regexes = [
+      /{{\s*Ü[^|}]*\|en\|([^}|]+)[^}]*}}/g,
+      /{{\s*Ü[^|}]*\|englisch\|([^}|]+)[^}]*}}/gi,
+      /{{\s*Üxx4?\|en\|([^}|]+)[^}]*}}/g
+    ];
+
+    for (const regex of regexes) {
+      regex.lastIndex = 0;
+      let match;
+      while ((match = regex.exec(zone)) !== null) {
+        const cleaned = cleanupValue(match[1]);
+        if (!isUnknown(cleaned)) {
+          matches.push(cleaned);
+        }
+      }
+    }
+  };
+
   const section = extractSection(wikitext, "Übersetzungen");
-  if (!section) {
-    return [];
+  collectFromZone(section);
+
+  // Guarded fallback: only template-based extraction from full entry when
+  // section parsing yields nothing.
+  if (matches.length === 0) {
+    collectFromZone(wikitext);
   }
 
-  const matches = [];
-  const regex = /{{Ü[^|}]*\|en\|([^}|]+)[^}]*}}/g;
+  const deduped = dedupe(matches).slice(0, 10);
+  if (deduped.length > 0) {
+    return deduped;
+  }
+
+  // Last fallback: some entries expose EN terms as linked lines like
+  // "{{en}}: [[go]], [[walk]]" outside standard templates.
+  const linkMatches = [];
+  const regex = /{{\s*en\s*}}\s*:\s*([^\n]+)/gi;
   let match;
-  while ((match = regex.exec(section)) !== null) {
-    const cleaned = cleanupValue(match[1]);
-    if (!isUnknown(cleaned)) {
-      matches.push(cleaned);
+  while ((match = regex.exec(wikitext)) !== null) {
+    const line = match[1] || "";
+    const linkRegex = /\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g;
+    let linkMatch;
+    while ((linkMatch = linkRegex.exec(line)) !== null) {
+      const cleaned = cleanupValue(linkMatch[1]);
+      if (!isUnknown(cleaned)) {
+        linkMatches.push(cleaned);
+      }
     }
   }
 
-  return dedupe(matches).slice(0, 10);
+  return dedupe(linkMatches).slice(0, 10);
 }
 
 export function extractNounInfo(wikitext) {
@@ -370,9 +416,111 @@ export function extractNounInfo(wikitext) {
   };
 }
 
+export function extractDerivedVariants(wikitext, title = "") {
+  const headingTokens = [
+    "abgeleitete begriffe",
+    "wortbildungen",
+    "verwandte begriffe",
+    "ableitungen",
+    "abgeleitete woerter",
+    "abgeleitete wörter"
+  ];
+
+  const zones = [];
+  const headingRegex = /(^|\n)(==+)\s*([^\n]+?)\s*\2/gm;
+  const matches = [...wikitext.matchAll(headingRegex)];
+  for (let i = 0; i < matches.length; i += 1) {
+    const match = matches[i];
+    const headingText = String(match[3] || "").toLowerCase();
+    const isDerivedHeading = headingTokens.some((token) =>
+      headingText.includes(token)
+    );
+    if (!isDerivedHeading) {
+      continue;
+    }
+
+    const start = (match.index || 0) + match[0].length;
+    const end = i + 1 < matches.length ? matches[i + 1].index || wikitext.length : wikitext.length;
+    zones.push(wikitext.slice(start, end));
+  }
+  const variants = [];
+  const currentTitle = String(title || "").toLowerCase();
+  const pushVariant = (raw) => {
+    const candidate = cleanupValue(raw);
+    if (isUnknown(candidate)) {
+      return;
+    }
+    const lowered = candidate.toLowerCase();
+    if (lowered === currentTitle) {
+      return;
+    }
+    if (!variants.includes(candidate)) {
+      variants.push(candidate);
+    }
+  };
+
+  for (const zone of zones) {
+    const linkRegex = /\[\[([^\]|:#]+)(?:\|[^\]]+)?\]\]/g;
+    linkRegex.lastIndex = 0;
+    let match;
+    while ((match = linkRegex.exec(zone)) !== null) {
+      pushVariant(match[1]);
+    }
+
+    // Common Wiktionary term templates in derived-related sections.
+    const templateRegexes = [
+      /{{\s*[Ll]\s*\|\s*de\s*\|\s*([^|}]+)[^}]*}}/g,
+      /{{\s*Link\s*\|\s*de\s*\|\s*([^|}]+)[^}]*}}/gi,
+      /{{\s*l\+\s*\|\s*de\s*\|\s*([^|}]+)[^}]*}}/gi
+    ];
+
+    for (const regex of templateRegexes) {
+      regex.lastIndex = 0;
+      while ((match = regex.exec(zone)) !== null) {
+        pushVariant(match[1]);
+      }
+    }
+  }
+
+  if (variants.length === 0 && currentTitle) {
+    // Fallback for entries where derived-term content is not captured by
+    // heading slicing but links still include lemma-based variants.
+    const lemmaLinkRegex = new RegExp(
+      `\\[\\[([^\\]|:#]*${escapeRegexToken(currentTitle)}[^\\]|:#]*)`,
+      "gi"
+    );
+    let match;
+    while ((match = lemmaLinkRegex.exec(wikitext)) !== null) {
+      pushVariant(match[1]);
+    }
+
+    const fullTemplateRegexes = [
+      /{{\s*[Ll]\s*\|\s*de\s*\|\s*([^|}]+)[^}]*}}/gi,
+      /{{\s*Link\s*\|\s*de\s*\|\s*([^|}]+)[^}]*}}/gi,
+      /{{\s*l\+\s*\|\s*de\s*\|\s*([^|}]+)[^}]*}}/gi
+    ];
+    for (const regex of fullTemplateRegexes) {
+      regex.lastIndex = 0;
+      while ((match = regex.exec(wikitext)) !== null) {
+        const candidate = String(match[1] || "").trim();
+        if (!candidate.toLowerCase().includes(currentTitle)) {
+          continue;
+        }
+        pushVariant(candidate);
+      }
+    }
+  }
+
+  return variants.slice(0, 30);
+}
+
 function normalizeGovernanceDetail(detail) {
   return detail
     .replace(/\s+/g, " ")
+    .replace(/\bjdn\./gi, "jdn.")
+    .replace(/\bjdm\./gi, "jdm.")
+    .replace(/\bjmdn\./gi, "jmdn.")
+    .replace(/\betw\./gi, "etw.")
     .replace(/\bakkusativ\b/gi, "Akkusativ")
     .replace(/akk\./gi, "Akkusativ")
     .replace(/\bdativ\b/gi, "Dativ")
@@ -458,12 +606,6 @@ function extractCaseGovernanceDetails(wikitext) {
     } else if (/genitiv/i.test(raw)) {
       pushDetail("Genitivobjekt");
     }
-  }
-
-  // Generic abbreviated case markers that frequently appear in verb rection lines.
-  const genericCaseRegex = /(?:\(|\b)(Akk\.|Dat\.|Gen\.)(?:\)|\b)/gi;
-  while ((match = genericCaseRegex.exec(searchableText)) !== null) {
-    pushDetail(`Marker: ${match[1]}`);
   }
 
   // Common dictionary shorthand: "etw. Akk.", "jdn. Akk.", "jdm. Dat."
@@ -727,18 +869,25 @@ export function hasInflectedFormMarkers(wikitext) {
 }
 
 function mergeUnknownFields(primary, fallback) {
-  if (!primary && fallback) {
-    return fallback;
+  if (primary == null) {
+    return fallback ?? primary;
   }
-  if (!primary || !fallback) {
+  if (fallback == null) {
     return primary;
   }
 
+  if (Array.isArray(primary)) {
+    return primary.length > 0 ? primary : fallback;
+  }
+
+  if (typeof primary !== "object" || typeof fallback !== "object") {
+    return isUnknown(primary) && !isUnknown(fallback) ? fallback : primary;
+  }
+
   const merged = { ...primary };
-  for (const [key, value] of Object.entries(fallback)) {
-    if (isUnknown(merged[key]) && !isUnknown(value)) {
-      merged[key] = value;
-    }
+  for (const [key, fallbackValue] of Object.entries(fallback)) {
+    const currentValue = merged[key];
+    merged[key] = mergeUnknownFields(currentValue, fallbackValue);
   }
   return merged;
 }
@@ -751,6 +900,10 @@ export function parseEntry({
 }) {
   const partOfSpeech = detectPartOfSpeech(wikitext);
   const translations = extractTranslations(wikitext);
+  const derivedVariants = mergeUnknownFields(
+    extractDerivedVariants(wikitext, title),
+    fallback?.derivedVariants
+  );
   const nounInfo = mergeUnknownFields(extractNounInfo(wikitext), fallback?.nounInfo);
   const verbInfo = mergeUnknownFields(
     extractVerbInfo(wikitext, title),
@@ -771,6 +924,7 @@ export function parseEntry({
     title,
     partOfSpeech,
     translations: finalTranslations,
+    derivedVariants,
     nounInfo,
     verbInfo,
     notes

@@ -78,6 +78,42 @@ body {
   font-size: 15px;
 }
 
+.headword-line {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.pos-inline {
+  font-size: 13px;
+  font-weight: 500;
+  color: #4b5a6f;
+}
+
+.case-tag {
+  font-size: 12px;
+  font-style: italic;
+  color: #56616f;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.speak-btn {
+  border: 0;
+  border-radius: 8px;
+  background: #eaf2ff;
+  color: #1b5fb5;
+  font-size: 15px;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+}
+
 .row {
   margin: 4px 0;
   font-size: 13px;
@@ -110,6 +146,37 @@ body {
 .notes {
   margin: 0;
   padding-left: 18px;
+}
+
+.derived-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.derived-btn {
+  border: 1px solid #c7d6ea;
+  border-radius: 999px;
+  background: #f1f6ff;
+  color: #1a5dae;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.derived-btn:hover {
+  background: #e4efff;
+}
+
+.derived-btn.disabled {
+  color: #8d99aa;
+  border-color: #d5dde9;
+  background: #f4f6fa;
+  cursor: not-allowed;
+}
+
+.derived-btn.disabled:hover {
+  background: #f4f6fa;
 }
 
 .hover-target {
