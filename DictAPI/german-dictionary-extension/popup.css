@@ -206,3 +206,32 @@ body {
 .hover-target:hover .tooltip {
   display: block;
 }
+
+.conj-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 6px;
+  border: 1px solid #d9e2ee;
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 13px;
+}
+
+.conj-table th,
+.conj-table td {
+  border: 1px solid #d9e2ee;
+  padding: 6px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.conj-table thead th {
+  background: #f5f8fc;
+  font-weight: 700;
+}
+
+.conj-table tbody th {
+  background: #f8fbff;
+  font-weight: 700;
+  width: 32%;
+}

@@ -81,6 +81,27 @@ function renderPastParticipleValue(verbInfo) {
   return renderHoverValue(`${base}${suffix}`, verbInfo.perfectConjugation);
 }
 
+function renderPerfectValue(verbInfo) {
+  const perfectIch = verbInfo?.perfectConjugation?.ich;
+  if (perfectIch && perfectIch !== "Unknown") {
+    return escapeHtml(perfectIch);
+  }
+
+  const participle = verbInfo?.pastParticiple;
+  if (!participle || participle === "Unknown") {
+    return unknownBadge("Unknown");
+  }
+
+  const auxiliaries = Array.isArray(verbInfo?.auxiliaryVerbs)
+    ? verbInfo.auxiliaryVerbs.filter((value) => value && value !== "Unknown")
+    : [];
+  if (auxiliaries.length === 0) {
+    return escapeHtml(participle);
+  }
+
+  return escapeHtml(`ich ${auxiliaries[0]} ${participle}`);
+}
+
 function renderIdle(message) {
   statusEl.textContent = message;
   resultEl.innerHTML = "";
@@ -110,9 +131,9 @@ function renderSuccess(result) {
 
   const translationsHtml =
     translations.length > 0
-      ? `<ul class="translations">${translations
-          .map((value) => `<li>${escapeHtml(value)}</li>`)
-          .join("")}</ul>`
+      ? `<div class="row">${translations
+          .map((value) => escapeHtml(value))
+          .join(", ")}</div>`
       : `<div class="row">No English translations extracted.</div>`;
 
   const caseShort = getCaseShortLabel(result?.verbInfo?.caseGovernance);
@@ -153,9 +174,26 @@ function renderSuccess(result) {
                 .join(" | ")}</div>`
             : ""
         }
-        <div class="row"><span class="label">Present:</span> ${renderHoverValue(result.verbInfo.present, result.verbInfo.presentConjugation)}</div>
-        <div class="row"><span class="label">Past tense:</span> ${renderHoverValue(result.verbInfo.preterite, result.verbInfo.preteriteConjugation)}</div>
-        <div class="row"><span class="label">Past participle:</span> ${renderPastParticipleValue(result.verbInfo)}</div>
+        <table class="conj-table">
+          <thead>
+            <tr>
+              <th>Praesens</th>
+              <th>Praeteritum</th>
+              <th>Partizip II</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>${renderHoverValue(result.verbInfo.present, result.verbInfo.presentConjugation)}</td>
+              <td>${renderHoverValue(result.verbInfo.preterite, result.verbInfo.preteriteConjugation)}</td>
+              <td>${renderPastParticipleValue(result.verbInfo)}</td>
+            </tr>
+            <tr>
+              <th>Perfekt</th>
+              <td colspan="2">${renderPerfectValue(result.verbInfo)}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     `
     : "";
@@ -327,9 +365,11 @@ resultEl.addEventListener("click", (event) => {
 
 window.addEventListener("DOMContentLoaded", async () => {
   renderIdle("Select a German word on a page, or type one above.");
+  input.focus();
   const selectedWord = await getHighlightedWord();
   if (selectedWord) {
     input.value = selectedWord;
+    input.select();
     runLookup(selectedWord);
   }
 });
