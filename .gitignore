@@ -22,6 +22,20 @@ Thumbs.db
 #############################################
 # BUILD SYSTEM ARTIFACTS (CMake, Make, Ninja)
 #############################################
+# Ignore compiled artifacts
+*.dll
+*.pdb
+*.o
+*.a
+*.so
+*.exe
+*.bin
+*.d
+*.cache
+*.Up2Date
+.DS_Store
+**/.DS_Store
+
 
 # CMake
 CMakeCache.txt
