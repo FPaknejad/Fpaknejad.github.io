@@ -1,3 +1,16 @@
+:root {
+  --bg: #f2eee6;
+  --card-bg: #fbf8f2;
+  --card-border: #e3dbcf;
+  --text: #4b4338;
+  --muted: #7f7668;
+  --accent: #909d78;
+  --accent-strong: #85916f;
+  --accent-soft: #edf1e5;
+  --chip-bg: #f4ede3;
+  --chip-border: #ddd2c2;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -5,8 +18,8 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #f6f7fb;
-  color: #1c2430;
+  background: var(--bg);
+  color: var(--text);
 }
 
 .app {
@@ -15,8 +28,16 @@ body {
   padding: 14px;
 }
 
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
 .title {
-  margin: 0 0 12px;
+  margin: 0;
   font-size: 18px;
 }
 
@@ -28,26 +49,33 @@ body {
 
 #word-input {
   width: 100%;
-  border: 1px solid #c9d2de;
+  border: 1px solid var(--card-border);
   border-radius: 8px;
   padding: 10px;
   font-size: 14px;
   outline: none;
+  background: #fcf9f4;
+  color: var(--text);
 }
 
 #word-input:focus {
-  border-color: #2475d1;
-  box-shadow: 0 0 0 2px rgba(36, 117, 209, 0.15);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(125, 138, 99, 0.2);
 }
 
 #lookup-btn {
   border: 0;
   border-radius: 8px;
-  background: #2475d1;
-  color: #fff;
+  background: var(--accent);
+  color: #f8f4ec;
   padding: 10px 12px;
   font-weight: 600;
   cursor: pointer;
+  min-width: 110px;
+}
+
+#lookup-btn:hover {
+  background: var(--accent-strong);
 }
 
 #lookup-btn:disabled {
@@ -55,10 +83,27 @@ body {
   cursor: wait;
 }
 
+.secondary-btn {
+  border: 1px solid var(--chip-border);
+  border-radius: 8px;
+  background: var(--chip-bg);
+  color: var(--text);
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  min-width: 96px;
+}
+
+.secondary-btn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
 .status {
   margin: 10px 2px 12px;
   font-size: 12px;
-  color: #516172;
+  color: var(--muted);
 }
 
 .result {
@@ -67,8 +112,8 @@ body {
 }
 
 .card {
-  background: #fff;
-  border: 1px solid #e2e8f0;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   border-radius: 10px;
   padding: 10px;
 }
@@ -87,13 +132,13 @@ body {
 .pos-inline {
   font-size: 13px;
   font-weight: 500;
-  color: #4b5a6f;
+  color: var(--muted);
 }
 
 .case-tag {
   font-size: 12px;
   font-style: italic;
-  color: #56616f;
+  color: var(--muted);
 }
 
 .header-row {
@@ -106,8 +151,8 @@ body {
 .speak-btn {
   border: 0;
   border-radius: 8px;
-  background: #eaf2ff;
-  color: #1b5fb5;
+  background: var(--accent-soft);
+  color: #58644a;
   font-size: 15px;
   width: 34px;
   height: 34px;
@@ -136,8 +181,8 @@ body {
 .badge-unknown {
   display: inline-block;
   border-radius: 999px;
-  background: #f2f4f8;
-  color: #5a6776;
+  background: #efe7db;
+  color: #7d7060;
   font-size: 11px;
   padding: 2px 7px;
   margin-left: 6px;
@@ -155,38 +200,38 @@ body {
 }
 
 .derived-btn {
-  border: 1px solid #c7d6ea;
+  border: 1px solid var(--chip-border);
   border-radius: 999px;
-  background: #f1f6ff;
-  color: #1a5dae;
+  background: var(--chip-bg);
+  color: #5a4f42;
   padding: 4px 10px;
   font-size: 12px;
   cursor: pointer;
 }
 
 .derived-btn:hover {
-  background: #e4efff;
+  background: #ece3d5;
 }
 
 .derived-btn.disabled {
-  color: #8d99aa;
-  border-color: #d5dde9;
-  background: #f4f6fa;
+  color: #aaa092;
+  border-color: #e0d6c8;
+  background: #f3ece1;
   cursor: not-allowed;
 }
 
 .derived-btn.disabled:hover {
-  background: #f4f6fa;
+  background: #f3ece1;
 }
 
 .example-en {
-  color: #5d6c83;
+  color: var(--muted);
   font-style: italic;
 }
 
 .hover-target {
   position: relative;
-  border-bottom: 1px dashed #8aa1be;
+  border-bottom: 1px dashed #9f8f77;
   cursor: help;
 }
 
@@ -200,9 +245,9 @@ body {
   display: none;
   padding: 8px 10px;
   border-radius: 8px;
-  border: 1px solid #b7c7dc;
-  background: #ffffff;
-  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.18);
+  border: 1px solid var(--chip-border);
+  background: #fcf8f1;
+  box-shadow: 0 4px 10px rgba(65, 52, 35, 0.1);
   font-size: 12px;
   line-height: 1.35;
   color: #1c2430;
@@ -217,7 +262,7 @@ body {
   width: 100%;
   border-collapse: collapse;
   margin-top: 6px;
-  border: 1px solid #d9e2ee;
+  border: 1px solid var(--card-border);
   border-radius: 8px;
   overflow: visible;
   font-size: 13px;
@@ -225,19 +270,19 @@ body {
 
 .conj-table th,
 .conj-table td {
-  border: 1px solid #d9e2ee;
+  border: 1px solid var(--card-border);
   padding: 6px 8px;
   text-align: left;
   vertical-align: top;
 }
 
 .conj-table thead th {
-  background: #f5f8fc;
+  background: #f4ede2;
   font-weight: 700;
 }
 
 .conj-table tbody th {
-  background: #f8fbff;
+  background: #f7f0e5;
   font-weight: 700;
   width: 32%;
 }

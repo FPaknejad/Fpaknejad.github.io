@@ -22,6 +22,28 @@ export const fixtures = [
     }
   },
   {
+    name: "noun_meinung_feminine",
+    sourceWord: "Meinung",
+    title: "Meinung",
+    wikitext: `
+== Meinung (Deutsch) ==
+{{Wortart|Substantiv|Deutsch}}
+{{Deutsch Substantiv Übersicht
+|Genus=f
+|Nominativ Singular=die Meinung
+|Nominativ Plural=Meinungen
+}}
+=== Übersetzungen ===
+* {{Ü|en|opinion}}
+`,
+    assert(result, helpers) {
+      helpers.expectEqual(result.partOfSpeech, "Noun", "partOfSpeech");
+      helpers.expectEqual(result.nounInfo?.article, "die", "noun article");
+      helpers.expectEqual(result.nounInfo?.plural, "Meinungen", "noun plural");
+      helpers.expectIncludes(result.translations, "opinion", "translations");
+    }
+  },
+  {
     name: "verb_gehen",
     sourceWord: "gehen",
     title: "gehen",
@@ -42,6 +64,9 @@ export const fixtures = [
 |Präteritum_ihr=gingt
 |Partizip II=gegangen
 |Hilfsverb_1=sein
+|Imperativ Singular=geh
+|Imperativ Plural=geht
+|Imperativ Sie=gehen Sie
 }}
 === Übersetzungen ===
 * {{Ü|en|go}}
@@ -60,6 +85,11 @@ export const fixtures = [
         result.verbInfo?.perfectConjugation?.ich,
         "bin gegangen",
         "perfect conjugation ich"
+      );
+      helpers.expectEqual(
+        result.verbInfo?.imperative,
+        "geh (du) / geht (ihr) / gehen Sie",
+        "imperative"
       );
     }
   },

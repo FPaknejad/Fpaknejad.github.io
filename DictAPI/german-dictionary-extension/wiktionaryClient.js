@@ -95,6 +95,25 @@ function pickBestTitle(results, word) {
   return exact ? exact.title : results[0].title;
 }
 
+function hasGermanEntry(wikitext) {
+  const text = String(wikitext || "");
+  if (!text.trim()) {
+    return false;
+  }
+
+  // Prefer explicit language section markers.
+  if (/==+\s*[^=\n]*\(\s*Deutsch\s*\)\s*==+/i.test(text)) {
+    return true;
+  }
+
+  // Fallback to common Deutsch templates used in Wortart lines.
+  if (/{{\s*Wortart\|[^|}]+\|Deutsch/i.test(text)) {
+    return true;
+  }
+
+  return false;
+}
+
 async function fetchWikitext(title) {
   const data = await fetchJson({
     action: "parse",
@@ -272,12 +291,48 @@ export async function lookupGermanWord(word) {
   }
 
   const results = await searchTitles(sourceWord);
-  const title = pickBestTitle(results, sourceWord);
-  if (!title) {
+  const preferredTitle = pickBestTitle(results, sourceWord);
+  if (!preferredTitle) {
     return { status: "not_found", word: sourceWord };
   }
 
-  const wikitext = await fetchWikitext(title);
+  const candidateTitles = [];
+  const seenTitles = new Set();
+  const pushCandidate = (title) => {
+    const normalized = normalizeTitle(title);
+    if (!normalized || seenTitles.has(normalized)) {
+      return;
+    }
+    seenTitles.add(normalized);
+    candidateTitles.push(title);
+  };
+
+  pushCandidate(preferredTitle);
+  for (const item of results) {
+    if (item?.title) {
+      pushCandidate(item.title);
+    }
+  }
+
+  let title = null;
+  let wikitext = "";
+  for (const candidateTitle of candidateTitles) {
+    try {
+      const candidateWikitext = await fetchWikitext(candidateTitle);
+      if (hasGermanEntry(candidateWikitext)) {
+        title = candidateTitle;
+        wikitext = candidateWikitext;
+        break;
+      }
+    } catch {
+      // Try next search candidate.
+    }
+  }
+
+  if (!title || !wikitext) {
+    return { status: "not_found", word: sourceWord };
+  }
+
   let parsed = parseEntry({
     sourceWord,
     title,

@@ -308,6 +308,66 @@ function buildPerfectConjugation(auxiliaryVerbs, participle) {
   return hasAny ? result : undefined;
 }
 
+function formatImperativeForm(raw, pronoun) {
+  const cleaned = cleanupValue(raw);
+  if (isUnknown(cleaned)) {
+    return UNKNOWN;
+  }
+
+  const text = String(cleaned).trim();
+  if (pronoun === "Sie") {
+    if (/\bSie\b/.test(text)) {
+      return text;
+    }
+    return `${text} Sie`;
+  }
+
+  // du/ihr formatting: "hole (du) ab", "holt (ihr) ab"
+  const parts = text.split(/\s+/).filter(Boolean);
+  if (parts.length === 1) {
+    return `${parts[0]} (${pronoun})`;
+  }
+  return `${parts[0]} (${pronoun}) ${parts.slice(1).join(" ")}`;
+}
+
+function buildImperativeValue(fieldMap) {
+  const duForm = formatImperativeForm(
+    pickFirstFieldFromMap(fieldMap, [
+      "Imperativ Singular",
+      "Imperativ_singular",
+      "Imperativ_du",
+      "Imperativ 2 Singular"
+    ]),
+    "du"
+  );
+  const ihrForm = formatImperativeForm(
+    pickFirstFieldFromMap(fieldMap, [
+      "Imperativ Plural",
+      "Imperativ_plural",
+      "Imperativ_ihr",
+      "Imperativ 2 Plural"
+    ]),
+    "ihr"
+  );
+  const sieForm = formatImperativeForm(
+    pickFirstFieldFromMap(fieldMap, [
+      "Imperativ Sie",
+      "Imperativ_sie",
+      "Imperativ Höflich",
+      "Imperativ_hoeflich",
+      "Imperativ höflich",
+      "Imperativ 3 Plural"
+    ]),
+    "Sie"
+  );
+
+  const forms = [duForm, ihrForm, sieForm].filter((value) => !isUnknown(value));
+  if (forms.length === 0) {
+    return UNKNOWN;
+  }
+  return dedupe(forms).join(" / ");
+}
+
 export function detectPartOfSpeech(wikitext) {
   const checks = [
     { pattern: /{{\s*Wortart\|Verb\|Deutsch/i, value: "Verb" },
@@ -482,18 +542,19 @@ export function extractNounInfo(wikitext) {
     return undefined;
   }
 
+  const fieldMap = buildFieldMap(wikitext);
+  const genusRaw = pickFirstFieldFromMap(fieldMap, [
+    "Genus",
+    "Genus 1",
+    "Genus_1"
+  ]);
+
   let genus = UNKNOWN;
-  if (/\|\s*Genus\s*=\s*m\b/i.test(wikitext) || /{{\s*m\s*}}/.test(wikitext)) {
+  if (/\bm\b/i.test(genusRaw)) {
     genus = "der";
-  } else if (
-    /\|\s*Genus\s*=\s*f\b/i.test(wikitext) ||
-    /{{\s*f\s*}}/.test(wikitext)
-  ) {
+  } else if (/\bf\b/i.test(genusRaw)) {
     genus = "die";
-  } else if (
-    /\|\s*Genus\s*=\s*n\b/i.test(wikitext) ||
-    /{{\s*n\s*}}/.test(wikitext)
-  ) {
+  } else if (/\bn\b/i.test(genusRaw)) {
     genus = "das";
   }
 
@@ -882,6 +943,7 @@ export function extractVerbInfo(wikitext, lemmaTitle = "") {
     "Partizip II",
     "Partizip Perfekt"
   ]);
+  const imperative = buildImperativeValue(fieldMap);
 
   const auxiliaryVerbs = extractAuxiliaryVerbs(fieldMap);
   const perfectConjugation = buildPerfectConjugation(auxiliaryVerbs, pastParticiple);
@@ -912,6 +974,7 @@ export function extractVerbInfo(wikitext, lemmaTitle = "") {
       "Präteritum"
     ]),
     pastParticiple,
+    imperative,
     caseGovernance: caseGovernanceSummary,
     caseGovernanceSummary,
     caseGovernanceDetails,
