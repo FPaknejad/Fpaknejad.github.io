@@ -1,68 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Name | Portfolio</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fatemeh Paknejad | Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-  <!-- Header -->
+
+  <!-- HEADER -->
   <header>
-    <h1>Your Name</h1>
-    <p>Software Developer | C++ | Cybersecurity</p>
+    <button id="theme-toggle">🌙</button>
+    <h1>Fatemeh Paknejad</h1>
+    <p>I build tools that make my work faster, smoother, and easier.</p>
+
     <nav>
-      <a href="#about">About</a>
       <a href="#projects">Projects</a>
       <a href="#skills">Skills</a>
       <a href="#contact">Contact</a>
     </nav>
   </header>
 
-  <!-- About -->
-  <section id="about">
-    <h2>About Me</h2>
-    <p>Short introduction about you, your studies, and what you enjoy building.</p>
-  </section>
+  <!-- MAIN -->
+  <main>
 
-  <!-- Projects -->
-  <section id="projects">
-    <h2>Projects</h2>
-    <div class="project-card">
-      <h3>Banking System (C++)</h3>
-      <p>CLI app simulating bank accounts with transactions, file persistence, and error handling.</p>
-      <a href="https://github.com/yourusername/banking-system" target="_blank">GitHub Repo</a>
-    </div>
-    <div class="project-card">
-      <h3>Life Management App</h3>
-      <p>Cross-platform productivity app with AI integration for reminders and prioritization.</p>
-      <a href="https://github.com/yourusername/life-management-app" target="_blank">GitHub Repo</a>
-    </div>
-  </section>
+    <!-- ABOUT -->
+    <section id="about">
+      <h2>About Me</h2>
+      <p>
+        Software Developer with experience in automotive software, C++ tooling,
+        and workflow automation. Previously worked on Smart Access systems,
+        AUTOSAR components, engineering tooling, and productivity pipelines
+        using C++, Python, and Qt. I enjoy building practical tools, experimenting
+        with new technologies, and turning small ideas into working software.
+      </p>
+    </section>
 
-  <!-- Skills -->
-  <section id="skills">
-    <h2>Skills</h2>
-    <ul>
-      <li>C++</li>
-      <li>Python</li>
-        <li>c++</li>
-      <li>Git & GitHub</li>
-        <li>Cybersecurity Basics</li>
-    </ul>
-  </section>
+    <!-- PROJECTS -->
+    <section id="projects">
+      <h2>Projects</h2>
 
-  <!-- Contact -->
-  <section id="contact">
-    <h2>Contact</h2>
-    <p>Email: <a href="ftpaknejad@gmail.com">ftpaknejad@gmail.com</a></p>
-    <p><a href="https://fpaknejad.github.io/" target="_blank">GitHub</a> | 
-       <a href="https://www.linkedin.com/in/fatemeh-paknejad/" target="_blank">LinkedIn</a></p>
-  </section>
+      <div class="project-grid">
 
-  <!-- Footer -->
+
+        <article class="project-card">
+          <h3>Clip Studio Paint Plugin</h3>
+          <p>Custom Loupedeck plugin with commands for tool switching, zooming, layer visibility, and muting so I can drive Clip Studio entirely from the console.</p>
+          <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/CSPPlugin" target="_blank" rel="noreferrer">View code</a>
+        </article>
+        <article class="project-card">
+          <h3>Expense Tracker</h3>
+          <p>Early-stage C++ expense tracker with an <code>Expense</code> model plus CLI/server scaffolding for logging purchases and categories.</p>
+          <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/ExpenseTracker" target="_blank" rel="noreferrer">View code</a>
+        </article>
+
+        <article class="project-card">
+          <h3>Hamdam</h3>
+          <p>Swift/Xcode starter for the HamDam Pet App iOS concept. Currently just the asset catalog while I shape UX and features.</p>
+          <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/Hamdam" target="_blank" rel="noreferrer">View code</a>
+        </article>
+        <article class="project-card">
+          <h3>Pipe Network</h3>
+          <p>C++ simulation that ingests <code>pipedata.txt</code> to calculate flow rates for a Bavarian pipe network model.</p>
+          <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/PipeNetwork" target="_blank" rel="noreferrer">View code</a>
+        </article>
+        <article class="project-card">
+          <h3>Dictionary ChromeExtension</h3>
+          <p>A quick German dictionary that adds translates the highlighted text or search word. Shows noun/verb grammar details examples.</p>
+          <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/Subtitle%20ChromeExtention" target="_blank" rel="noreferrer">View code</a>
+        </article>
+        <article class="project-card">
+          <h3>TaskManagerCLI</h3>
+          <p>Menu-driven C++ task manager that adds, edits, filters, and persists todos through a simple repository interface.</p>
+          <a href="https://github.com/FPaknejad/Fpaknejad.github.io/tree/main/TaskManagerCLI" target="_blank" rel="noreferrer">View code</a>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+      <h2>Skills Snapshot</h2>
+
+      <div class="skills-grid">
+
+        <div>
+          <h3>Programming</h3>
+          <ul class="pill-list">
+            <li>C++</li>
+            <li>Python</li>
+            <li>C#</li>
+            <li>SQL</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Frameworks & Libraries</h3>
+          <ul class="pill-list">
+            <li>Qt</li>
+            <li>AUTOSAR</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>DevOps & Tools</h3>
+          <ul class="pill-list">
+            <li>Docker</li>
+            <li>GitHub Actions</li>
+            <li>CI/CD Pipelines</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>APIs & Workflows</h3>
+          <ul class="pill-list">
+            <li>REST APIs</li>
+            <li>Jira / Confluence</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <h2>Contact</h2>
+
+      <p>
+        <img src="icons/email.png" class="icon-img" alt="" />
+        <a href="mailto:ftpaknejad@gmail.com">ftpaknejad@gmail.com</a>
+      </p>
+
+      <p>
+        <img src="icons/github.png" class="icon-img" alt="" />
+        <a href="https://github.com/FPaknejad" target="_blank">GitHub</a>
+        ·
+        <img src="icons/linkedin.png" class="icon-img" alt="" />
+        <a href="https://www.linkedin.com/in/fatemeh-paknejad/" target="_blank">LinkedIn</a>
+      </p>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
   <footer>
-    <p>&copy; 2025 Your Name</p>
+    <p>&copy; <span id="year"></span> Fatemeh Paknejad</p>
   </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const toggle = document.getElementById("theme-toggle");
+    toggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      toggle.textContent =
+        document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
+    });
+  </script>
+
 </body>
 </html>

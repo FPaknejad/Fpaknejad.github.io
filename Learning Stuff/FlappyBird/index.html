@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#0b1220" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>Flappy Bird</title>
+
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./icon-192.svg" />
+
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar" aria-label="Game toolbar">
+        <div class="brand">
+          <span class="brand__title">Flappy</span>
+          <span class="brand__subtitle">Tap / Space</span>
+        </div>
+        <div class="hud" aria-label="Score">
+          <div class="hud__item">
+            <span class="hud__label">Best</span>
+            <span id="bestScore" class="hud__value">0</span>
+          </div>
+          <div class="hud__divider" aria-hidden="true"></div>
+          <div class="hud__item">
+            <span class="hud__label">Score</span>
+            <span id="score" class="hud__value">0</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="stage" aria-label="Game stage">
+        <canvas id="game" class="stage__canvas" aria-label="Flappy Bird canvas"></canvas>
+        <div id="overlay" class="overlay" aria-live="polite">
+          <div class="card">
+            <h1 class="card__title">Flappy Bird</h1>
+            <p id="overlayText" class="card__text">
+              Tap / click / press Space to start. Tap again to flap.
+            </p>
+            <div class="card__row">
+              <button id="playBtn" class="btn" type="button">Play</button>
+              <button id="fullscreenBtn" class="btn btn--ghost" type="button">Fullscreen</button>
+            </div>
+            <p class="card__hint">
+              Works on desktop, iPhone/Android browsers, and installs as an app (PWA).
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span>Controls: Tap / Space / Click</span>
+        <span class="footer__sep" aria-hidden="true">•</span>
+        <span>Restart after crash</span>
+      </footer>
+    </main>
+
+    <script type="module" src="./game.js"></script>
+  </body>
+</html>

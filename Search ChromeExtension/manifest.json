@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Multi-Tab Find",
+  "version": "1.0",
+  "description": "Search for a term across all open tabs and step through results.",
+  "permissions": ["tabs", "scripting", "activeTab"],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Multi-Tab Find"
+  },
+  "icons": {
+    "128": "icons/icon128.png"
+  }
+}

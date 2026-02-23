@@ -1,41 +1,277 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background: #f9f9f9;
-  color: #333;
+/* -----------------------------------------------------
+   RESET & TOKENS
+----------------------------------------------------- */
+
+:root {
+  color-scheme: light;
+
+  --font-base: "Inter", system-ui, sans-serif;
+
+  /* Light Mode */
+  --bg-body: #f4e9ff;
+  --text-body: #3e3943;
+  --bg-header: #584769;
+  --text-header: #f4e9ff;
+  --link-nav: #f6eeff;
+
+  --section-bg: #ffffff;
+  --section-shadow: 0 25px 50px -12px rgba(99, 91, 107, 0.15);
+
+  --card-bg: #e4d9f1;
+  --card-text: #3e3943;
+  --card-shadow: 0 20px 35px -20px rgba(99, 91, 107, 0.25);
+
+  --pill-bg: #e4d9f1;
+  --pill-text: #3e3943;
+
+  --accent-bg: #ecccf6;
+  --accent-text: #3e3943;
+
+  --footer-bg: #635b6b;
+  --footer-text: #f4e9ff;
+
+  --radius-lg: 16px;
+  --radius-md: 14px;
+  --radius-pill: 999px;
+
+  --gap-grid: 1.5rem;
+  --spacing-section: 2rem;
+  --spacing-card: 1.2rem;
+
+  --transition-fast: 0.2s ease;
+  --transition-slow: 0.35s ease;
 }
+
+/* DARK MODE TOKEN OVERRIDES */
+.dark-mode {
+  color-scheme: dark;
+
+  --bg-body: #18121f;
+  --text-body: #f4e9ff;
+
+  --bg-header: #2a2332;
+  --text-header: #f4e9ff;
+  --link-nav: #cbb8e5;
+
+  --section-bg: #2a2235;
+  --section-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+
+  --card-bg: #3a3047;
+  --card-text: #f4e9ff;
+  --card-shadow: 0 20px 35px -18px rgba(0, 0, 0, 0.45);
+
+  --pill-bg: #3a3047;
+  --pill-text: #f4e9ff;
+
+  --accent-bg: #cba6f7;
+  --accent-text: #1c1626;
+
+  --footer-bg: #2a2332;
+  --footer-text: #f4e9ff;
+}
+
+/* -----------------------------------------------------
+   BASE
+----------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-body);
+  color: var(--text-body);
+  font-family: var(--font-base);
+  line-height: 1.6;
+  min-height: 100vh;
+  transition: background var(--transition-slow), color var(--transition-slow);
+}
+
+main {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  padding: 0 1rem 3rem;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0 0 1rem;
+}
+
+/* -----------------------------------------------------
+   HEADER & NAV
+----------------------------------------------------- */
 
 header {
   text-align: center;
-  padding: 2rem;
-  background: #111;
-  color: white;
+  background: var(--bg-header);
+  color: var(--text-header);
+  padding: 3rem 1rem 2.5rem;
+  position: relative;
+  border-bottom-left-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-lg);
+}
+
+nav {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 nav a {
-  margin: 0 10px;
-  color: #ffcc00;
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--radius-pill);
+  color: var(--link-nav);
+  font-weight: 600;
   text-decoration: none;
+  transition: background var(--transition-fast), transform var(--transition-fast);
 }
 
+nav a:hover {
+  background: rgba(244, 233, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* -----------------------------------------------------
+   SECTIONS
+----------------------------------------------------- */
+
 section {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 1rem;
+  background: var(--section-bg);
+  margin: 2rem auto 0;
+  padding: var(--spacing-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--section-shadow);
+}
+
+/* -----------------------------------------------------
+   PROJECTS
+----------------------------------------------------- */
+
+.project-grid {
+  display: grid;
+  gap: var(--gap-grid);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  margin-top: 1.2rem;
 }
 
 .project-card {
-  background: white;
-  padding: 1rem;
-  margin: 1rem 0;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background: var(--card-bg);
+  padding: var(--spacing-card);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  box-shadow: var(--card-shadow);
 }
 
-footer {
+.project-card a {
+  display: inline-block;
+  padding: 0.6rem 1.8rem;
+  margin-top: 1rem;
+
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 25px;
+
+  font-weight: 600;
+  color: var(--text-body);
+  text-decoration: none;
   text-align: center;
-  padding: 1rem;
-  background: #111;
-  color: white;
+
+  backdrop-filter: blur(4px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+
+  transition: all 0.2s ease;
+}
+
+.project-card a:hover {
+  background: rgba(255, 255, 255, 0.55);
+  transform: translateY(-2px);
+}
+
+/* -----------------------------------------------------
+   SKILLS
+----------------------------------------------------- */
+
+.pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.pill-list li {
+  background: var(--pill-bg);
+  color: var(--pill-text);
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+}
+
+/* -----------------------------------------------------
+   CONTACT ICONS
+----------------------------------------------------- */
+
+.icon-img {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.4rem;
+  vertical-align: middle;
+}
+
+/* -----------------------------------------------------
+   FOOTER
+----------------------------------------------------- */
+
+footer {
+  background: var(--footer-bg);
+  color: var(--footer-text);
+  padding: 1.5rem 1rem;
+  margin-top: 3rem;
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
+  text-align: center;
+}
+
+/* -----------------------------------------------------
+   THEME TOGGLE
+----------------------------------------------------- */
+
+#theme-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 0.35rem 0.8rem;
+  border-radius: var(--radius-pill);
+  border: none;
+  cursor: pointer;
+  background: var(--accent-bg);
+  color: var(--accent-text);
+}
+
+/* -----------------------------------------------------
+   RESPONSIVE
+----------------------------------------------------- */
+
+@media (max-width: 640px) {
+  header {
+    padding: 2.5rem 1rem 2rem;
+  }
+
+  nav {
+    gap: 0.4rem;
+  }
+
+  #theme-toggle {
+    position: static;
+    margin-top: 1rem;
+  }
 }
